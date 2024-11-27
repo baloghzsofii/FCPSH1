@@ -1,0 +1,105 @@
+from tkinter import *
+from tkinter import messagebox
+from datetime import datetime
+from tkinter import ttk
+
+
+def belepes():
+    pass
+
+
+
+
+def idopont_foglalas():
+    def ok_gomb_kezelese():
+        # Gather all input values for appointment details
+        nev = f_nev.get()
+        telefonszam = telefon.get()
+        datum = datum_be.get()
+        ido = ido_valaszto.get()
+        fodrasz = fodrasz_valaszto.get()
+        szolgaltatas = szolgaltatas_valaszto.get()
+
+        # Check if all fields are filled
+        if not nev or not telefonszam or not datum or not ido or not fodrasz or not szolgaltatas:
+            messagebox.showwarning("Hiányzó adatok", "Kérjük, töltsön ki minden mezőt!")
+            return
+
+        # Confirm appointment
+        confirmation = messagebox.askyesno("Foglalás megerősítése",
+                                           f"Biztosan lefoglalja az időpontot?\n\nNév: {nev}\nTelefon: {telefonszam}\nDátum: {datum}\nIdő: {ido}\nFodrász: {fodrasz}\nSzolgáltatás: {szolgaltatas}")
+        if confirmation:
+            messagebox.showinfo("Sikeres foglalás", "Az időpontot sikeresen lefoglalta!")
+
+
+
+    # Labels and entry fields for customer information
+    f_nev_cimke = Label(app, text="Név:")
+    telefon_cimke = Label(app, text="Telefonszám:")
+    datum_cimke = Label(app, text="Dátum (ÉÉÉÉ-HH-NN):")
+    ido_cimke = Label(app, text="Idő:")
+    fodrasz_cimke = Label(app, text="Fodrász:")
+    szolgaltatas_cimke = Label(app, text="Szolgáltatás:")
+
+    # Input fields for booking details
+    f_nev = StringVar()
+    telefon = StringVar()
+    datum = StringVar()
+
+    f_nev_be = Entry(app, textvariable=f_nev, width=30)
+    telefon_be = Entry(app, textvariable=telefon, width=30)
+    datum_be = Entry(app, textvariable=datum, width=30)
+
+    # Dropdown for selecting time slot
+    ido_valaszto = ttk.Combobox(app, values=["10:00", "11:00", "12:00", "13:00", "14:00", "15:00"], width=27)
+    fodrasz_valaszto = ttk.Combobox(app, values=["Fodrász1", "Fodrász2", "Fodrász3"], width=27)
+    szolgaltatas_valaszto = ttk.Combobox(app, values=["Hajvágás", "Festés", "Melír", "Balayage"], width=27)
+
+    # OK button to confirm booking
+    ok_gomb = Button(app, text="Foglalás", command=ok_gomb_kezelese)
+
+    # Packing all elements
+    f_nev_cimke.pack()
+    f_nev_be.pack()
+    telefon_cimke.pack()
+    telefon_be.pack()
+    datum_cimke.pack()
+    datum_be.pack()
+    ido_cimke.pack()
+    ido_valaszto.pack()
+    fodrasz_cimke.pack()
+    fodrasz_valaszto.pack()
+    szolgaltatas_cimke.pack()
+    szolgaltatas_valaszto.pack()
+    ok_gomb.pack()
+
+    menulista = Menu(app)
+
+    fajl = Menu(menulista)
+    fajl.add_command(label="Időpont Foglalás", command=idopont_foglalas)
+    fajl.add_command(label="Kilépés", command=app.destroy)
+    menulista.add_cascade(label="Fájl", menu=fajl)
+
+    egyeb = Menu(menulista)
+    egyeb.add_command(label="Névjegy", command=nevjegy)
+    egyeb.add_command(label="Súgó", command=sugo)
+    menulista.add_cascade(label="Egyéb", menu=egyeb)
+
+    app.config(menu=menulista)
+
+
+
+
+def nevjegy():
+    messagebox.showinfo("Névjegy", "Készítő: Én, 2024")
+
+
+def sugo():
+    messagebox.showerror("Súgó", "Még nincs súgó!")
+
+
+app = Tk()
+app.title("Fodrászat Időpont Foglalás")
+app.geometry("800x600")
+idopont_foglalas();
+app.mainloop()
